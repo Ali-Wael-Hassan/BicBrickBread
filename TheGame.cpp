@@ -12,8 +12,10 @@
 #include <vector>   // Required for vector
 #include <memory>   // Required for unique_ptr
 
+#include "BoardGame_Classes.h"
 #include "header\BoardGame_Classes.h"
 #include "header\XO_Classes.h"
+#include "Games\XO_inf\XO_inf.h"
 using namespace std;
 
 /**
@@ -28,41 +30,70 @@ using namespace std;
  *
  * @return int Returns 0 on successful execution.
  */
-int main()
-{
+int main() {
 
-    srand(static_cast<unsigned int>(time(0))); // Seed the random number generator
+    srand(static_cast<unsigned int>(time(0)));  // Seed the random number generator
 
-    // Create an instance of the specific UI for X-O using a pointer
-    UI<char> *game_ui = new XO_UI();
+    // Create an instance of the specific UI for X-O using a pointer 
+   /* UI<char>* game_ui = new XO_UI();*/
 
     // Create the game board. For X-O, this is an X_O_Board.
-    Board<char> *xo_board = new X_O_Board();
+   /* Board<char>* xo_board = new X_O_Board();*/
 
     // Use the UI to set up the players for the game.
     // The UI returns a dynamically allocated array of Player pointers.
-    Player<char> **players = game_ui->setup_players();
+   /* Player<char>** players = game_ui->setup_players();*/
 
     // Create the game manager with the board and the array of players.
-    GameManager<char> x_o_game(xo_board, players, game_ui);
+   /* GameManager<char> x_o_game(xo_board, players, game_ui);*/
 
     // Run the game loop.
-    x_o_game.run();
+   /* x_o_game.run();*/
 
     // --- Cleanup ---
     // Delete the dynamically allocated board object.
-    delete xo_board;
+   /* delete xo_board;*/
 
     // Delete the individual player objects.
-    for (int i = 0; i < 2; ++i)
-    {
+    /*for (int i = 0; i < 2; ++i) {
         delete players[i];
-    }
+    }*/
     // Delete the dynamically allocated array of player pointers itself.
-    delete[] players;
+    //delete[] players;
+    bool finish = 0;
+    while (!finish) {
+        int choice;
+        cout << "Choose a game:\n";
+        cout << "1)XO\n2)XO_inf\n3)Exit\n";
+        cin >> choice;
+        if (choice == 1) {
+            UI<char>* game_ui = new XO_UI();
+            Board<char>* xo_board = new X_O_Board();
+            Player<char>** players = game_ui->setup_players();
+            GameManager<char> x_o_game(xo_board, players, game_ui);
+            x_o_game.run();
+            delete xo_board;
+            for (int i = 0; i < 2; ++i) {
+                delete players[i];
+            }
+            delete[] players;
+        }
 
-    system("pause");
+        else if (choice == 2) {
+            UI<char>* game_ui = new XO_inf_UI();
+            Board<char>* inf_board = new XO_inf_Board();
+            Player<char>** players = game_ui->setup_players();
+            GameManager<char> XO_inf_game(inf_board, players, game_ui);
+            XO_inf_game.run();
+            delete inf_board;
+            for (int i = 0; i < 2; ++i) {
+                delete players[i];
+            }
+            delete[] players;
+        }
+        else if (choice == 3) { finish = 1; }
 
+    }
     return 0; // Exit successfully
 }
 
